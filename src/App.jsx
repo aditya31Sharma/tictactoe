@@ -1,17 +1,15 @@
 import React, { useState } from 'react';
 import './styles/root.scss';
 import Board from './components/Board';
+import History from './components/History';
 import { calculateWinner } from './helpers';
 
 const App = () => {
-  // const [board, setBoard] = useState(Array(9).fill(null));
-  // const [isXNext, setXNext] = useState(false);
   const [history, setHistory] = useState([
     { board: Array(9).fill(null), isXNext: true },
   ]);
   const [currentMove, setCurrentMove] = useState(0);
   const current = history[currentMove];
-  console.log(history);
 
   const winner = calculateWinner(current.board);
   const message = winner
@@ -33,14 +31,17 @@ const App = () => {
       });
       return prevState.concat({ board: newBoard, isXNext: !last.isXNext });
     });
-    setCurrentMove(prevState=>prevState+1);
+    setCurrentMove(prevState => prevState + 1);
   };
-
+  const moveTo = move => {
+    setCurrentMove(move);
+  };
   return (
     <div className="app">
       <h1>TicTacToe</h1>
       <h2>{message}</h2>
       <Board board={current.board} handleSquareClick={handleSquareClick} />
+      <History history={history} moveTo={moveTo} currentMove={currentMove}/>
     </div>
   );
 };
